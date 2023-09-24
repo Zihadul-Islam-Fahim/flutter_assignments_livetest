@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_assignments_livetest/Cart_Page.dart';
 
 main() {
   runApp(const MyApp());
@@ -6,7 +7,7 @@ main() {
 
 class Product {
   String name = '';
-  double? price= 0;
+  double? price = 0;
   int? count = 0;
 
   Product(this.name, this.price, this.count);
@@ -22,7 +23,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(primarySwatch: Colors.teal),
+      themeMode: ThemeMode.light,
       home: HomePage(),
     );
   }
@@ -74,75 +77,53 @@ class _HomePageState extends State<HomePage> {
           itemCount: productlist.length,
           itemBuilder: (context, int i) {
             Product product = productlist[i];
-            return ListTile(
-              title: Text(product.name),
-              subtitle: Text('\$${product.price}'),
-              trailing: Column(
-                children: [
-                  Text('Count: ${product.count}'),
-                  Expanded(
-                      child: ElevatedButton(
-                    child: const Text(
-                      'Buy Now',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        product.count = product.count! + 1;
-                        if (product.count == 5) {
-                          setState(() {
-                            cart = cart! + 1;
-                          });
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Congratulations !'),
-                                  content:
-                                      Text('You\'ve bought 5 ${product.name}!'),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('Ok'))
-                                  ],
-                                );
-                              });
-                        } else if (product.count == 6) {
-                          product.count = 5;
-                        }
-                      });
-                    },
-                  ))
-                ],
+            return Card(
+              child: ListTile(
+                title: Text(product.name),
+                subtitle: Text('\$${product.price}'),
+                trailing: Column(
+                  children: [
+                    Text('Count: ${product.count}'),
+                    Expanded(
+                        child: ElevatedButton(
+                      child: const Text(
+                        'Buy Now',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          product.count = product.count! + 1;
+                          if (product.count == 5) {
+                            setState(() {
+                              cart = cart! + 1;
+                            });
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Congratulations !'),
+                                    content: Text(
+                                        'You\'ve bought 5 ${product.name}!'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('Ok'))
+                                    ],
+                                  );
+                                });
+                          } else if (product.count == 6) {
+                            product.count = 5;
+                          }
+                        });
+                      },
+                    ))
+                  ],
+                ),
               ),
             );
           }),
-    );
-  }
-}
-
-class Cartpage extends StatefulWidget {
-  final int? cartcount;
-
-  const Cartpage({super.key, required this.cartcount});
-
-  @override
-  State<Cartpage> createState() => _CartpageState();
-}
-
-class _CartpageState extends State<Cartpage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cart'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Text('Total Product ${widget.cartcount}',style: const TextStyle(fontSize: 26),),
-      ),
     );
   }
 }
