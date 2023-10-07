@@ -32,22 +32,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
- m(widesize){
-  if(widesize>600){
-    return true;
-  }
-}
-
-List imageList = [
-  'https://via.placeholder.com/150',
-  'https://via.placeholder.com/150',
-  'https://via.placeholder.com/150',
-  'https://via.placeholder.com/150',
-  'https://via.placeholder.com/150',
-  'https://via.placeholder.com/150',
-  'https://via.placeholder.com/150',
-  'https://via.placeholder.com/150',
-  'https://via.placeholder.com/150',
-  'https://via.placeholder.com/150',
-];
