@@ -306,6 +306,14 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+MySnapbar(msg, context) {
+
+    return ScaffoldMessenger.of(context)
+
+        .showSnackBar(SnackBar(content: Text(msg)));
+
+  }
+
 class Products {
   final productName;
   final productColor;
