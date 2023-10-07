@@ -23,13 +23,13 @@ class _HomePageState extends State<HomePage> {
   List<Products> ProductList = [
     Products('Luis Fris', 'Orange', 0, 42, 50,
         'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1925&q=80'),
-    Products('Air Jordan 12 Gym Red', 'Red', 0, 40, 100,
+    Products('Air Jordan 12', 'Red', 0, 40, 100,
         'https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'),
     Products('Heiso SL', 'Black', 0, 39, 70,
         'https://images.unsplash.com/photo-1491553895911-0055eca6402d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1780&q=80')
   ];
   int totaloneItem = 0;
-  int totalShopping = 0;
+  // int totalShopping = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                       )),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(15),
                   child: Text(
                     'My Shoe',
                     style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (context, index) {
                         Products product = ProductList[index];
                         return Padding(
-                          padding: EdgeInsets.all(20),
+                          padding: EdgeInsets.all(10),
                           child: Container(
                             clipBehavior: Clip.hardEdge,
                             height: 120,
@@ -77,10 +77,16 @@ class _HomePageState extends State<HomePage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                AspectRatio(
-                                  aspectRatio: 16 / 13,
-                                  child: ClipRect(
-                                    child: Image.network(product.productPhoto),
+                                Expanded(
+                                  flex: 40,
+                                  child: AspectRatio(
+                                    aspectRatio: 4 / 7,
+                                    child: ClipRect(
+                                      child: Image.network(
+                                        product.productPhoto,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 Expanded(
@@ -109,44 +115,44 @@ class _HomePageState extends State<HomePage> {
                                                   TextSpan(
                                                     text: 'Color: ',
                                                     style: TextStyle(
+                                                        fontSize: 12,
                                                         color: Colors.grey),
                                                   ),
                                                   TextSpan(
                                                     text:
-                                                        '${product.productColor}    ',
+                                                        '${product.productColor}  ',
                                                     style: TextStyle(
+                                                        fontSize: 12,
                                                         color: Colors.black),
                                                   ),
                                                   TextSpan(
                                                     text: 'Size: ',
                                                     style: TextStyle(
+                                                        fontSize: 12,
                                                         color: Colors.grey),
                                                   ),
                                                   TextSpan(
                                                     text:
                                                         '${product.productSize}    ',
                                                     style: TextStyle(
+                                                        fontSize: 12,
                                                         color: Colors.black),
                                                   ),
                                                 ],
                                               ),
                                             ),
                                           ),
-                                          Expanded(
-                                            flex: 60,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  flex: 40,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                      right: 9,
-                                                      top: 5,
-                                                    ),
+                                          SizedBox(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(6.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 6,
                                                     child: Container(
                                                       height: 45,
                                                       child: IconButton(
@@ -179,18 +185,18 @@ class _HomePageState extends State<HomePage> {
                                                               BoxShape.circle),
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                    flex: 20,
-                                                    child: Text(
-                                                        '${product.productCount}',
-                                                        style: TextStyle(
-                                                            fontSize: 21))),
-                                                Expanded(
-                                                  flex: 40,
-                                                  child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 5, right: 9),
+                                                  SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Flexible(
+                                                      fit: FlexFit.tight,
+                                                      flex: 3,
+                                                      child: Text(
+                                                          '${product.productCount}',
+                                                          style: TextStyle(
+                                                              fontSize: 21))),
+                                                  Expanded(
+                                                    flex: 6,
                                                     child: Container(
                                                       height: 45,
                                                       child: IconButton(
@@ -215,8 +221,8 @@ class _HomePageState extends State<HomePage> {
                                                               BoxShape.circle),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           )
                                         ],
@@ -225,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 Expanded(
-                                  flex: 20,
+                                  flex: 15,
                                   child: Padding(
                                     padding: const EdgeInsets.all(15.0),
                                     child: Align(
@@ -277,7 +283,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Text(
                           '$totaloneItem\$',
-                          style: TextStyle(fontSize: 13),
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -293,8 +300,13 @@ class _HomePageState extends State<HomePage> {
                         height: double.infinity,
                         minWidth: double.infinity,
                         color: Colors.red,
-                        onPressed: () {},
-                        child: Text('Check Out'),
+                        onPressed: () {
+                          MySnapbar('Congratulations!', context);
+                        },
+                        child: Text(
+                          'Check Out',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   )
@@ -307,12 +319,9 @@ class _HomePageState extends State<HomePage> {
 }
 
 MySnapbar(msg, context) {
-
-    return ScaffoldMessenger.of(context)
-
-        .showSnackBar(SnackBar(content: Text(msg)));
-
-  }
+  return ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text(msg)));
+}
 
 class Products {
   final productName;
