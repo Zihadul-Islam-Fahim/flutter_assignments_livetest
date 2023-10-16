@@ -19,7 +19,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
         actions: [
           IconButton(
               onPressed: () {},
@@ -95,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       title: Text(taskList[index].title),
                       subtitle: Text(taskList[index].subTitle),
-                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      trailing: const Icon(Icons.arrow_forward),
                       tileColor: Colors.grey[300],
                       onLongPress: () {
                         showDialog(
