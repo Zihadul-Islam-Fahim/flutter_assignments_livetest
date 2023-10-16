@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                               _titleTEController.clear();
                               _subTitleTEController.clear();
                             },
-                            child: const Text("Add"))),
+                            child: const Text("Add",style: TextStyle(color: Colors.white),))),
                     const SizedBox(
                       height: 40,
                     ),
