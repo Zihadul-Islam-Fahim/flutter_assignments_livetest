@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'Todos.dart';
-import 'UpdateTodoModal.dart';
+import 'package:flutter_assignments_livetest/ShowDetails.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,151 +11,95 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Todos> taskList = [];
-  final TextEditingController _titleTEController = TextEditingController();
-  final TextEditingController _subTitleTEController = TextEditingController();
+  @override
+  List<Photos> photoList = [];
+
+  Future<List<Photos>> getPhotosApi() async {
+    var response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/photos'));
+    var data = jsonDecode(response.body.toString());
+    if (response.statusCode == 200) {
+      for (Map i in data) {
+        Photos photos = Photos(id: i["id"], title: i["title"], url: i["url"]);
+        photoList.add(photos);
+        print(photos.id);
+      }
+      return photoList;
+    } else {
+      return photoList;
+    }
+  }
+
+  void initState() {
+    getPhotosApi();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                color: Colors.blue,
-              ))
-        ],
+        title: Text("Photo Gallery Album"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              color: Colors.white,
-              child: Form(
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    TextFormField(
-                        controller: _titleTEController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Add Title",
-                        )),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    TextFormField(
-                        controller: _subTitleTEController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Add Description",
-                        )),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    SizedBox(
-                        width: 200,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Todos todos = Todos(
-                                  title: _titleTEController.text.trim(),
-                                  subTitle: _subTitleTEController.text.trim());
-                              addTask(todos);
-                              _titleTEController.clear();
-                              _subTitleTEController.clear();
-                            },
-                            child: const Text("Add",style: TextStyle(color: Colors.white),))),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 65,
-              child: ListView.separated(
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 8,
-                    );
-                  },
-                  itemCount: taskList.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: CircleAvatar(
-                        child: Text("${index + 1}"),
-                      ),
-                      title: Text(taskList[index].title),
-                      subtitle: Text(taskList[index].subTitle),
-                      trailing: const Icon(Icons.arrow_forward),
-                      tileColor: Colors.grey[300],
-                      onLongPress: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Alert'),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            context: context,
-                                            builder: (context) {
-                                              return UpdateTodoModal(
-                                                index: index,
-                                                updateCallback: updateTasktitle,
-                                                title: taskList[index].title,
-                                                subTitle:
-                                                    taskList[index].subTitle,
-                                              );
-                                            });
-                                      },
-                                      child: const Text("Edit")),
-                                  const SizedBox(
-                                    width: 150,
-                                  ),
-                                  TextButton(
-                                      onPressed: () {
-                                        deleteTask(index);
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text("Delete")),
-                                ],
-                              );
-                            });
+      body: Column(
+        children: [
+          Expanded(
+            child: FutureBuilder(
+              future: getPhotosApi(),
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Photos>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.separated(
+                      itemCount: photoList.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: SizedBox(
+                              height: 60,
+                              width: 60,
+                              child: Image.network(
+                                '${snapshot.data![index].url}',
+                                fit: BoxFit.cover,
+                              )),
+                          title: Text(snapshot.data![index].title.toString()),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ShowDetails(
+                                        photoIndex: photoList[index])));
+                          },
+                        );
                       },
-                    );
-                  }),
-            )
-          ],
-        ),
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          height: 8,
+                        );
+                      },
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
+}
 
-  addTask(Todos taskDetails) {
-    taskList.add(taskDetails);
-    setState(() {});
-  }
+class Photos {
+  final int id;
+  final String title;
+  final String url;
 
-  updateTasktitle(index, title, subtitle) {
-    taskList[index].title = title;
-    taskList[index].subTitle = subtitle;
-    setState(() {});
-  }
-
-  deleteTask(int index) {
-    taskList.removeAt(index);
-    setState(() {});
-  }
+  Photos({
+    required this.id,
+    required this.title,
+    required this.url,
+  });
 }
